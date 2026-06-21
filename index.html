@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cortex: A Bidirectionally Aligned Embodied Agent Framework</title>
+  <meta name="description" content="Cortex is a bidirectionally aligned embodied agent framework for long-horizon manipulation, aligning high-level VLM planning with low-level VLA execution through executable subtasks and compact memory." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cortex: A Bidirectionally Aligned Embodied Agent Framework" />
+  <meta property="og:description" content="A dual-system embodied agent for long-horizon manipulation with 32 canonical skills, event-balanced planning, and real-world zero-shot deployment." />
+  <meta property="og:image" content="static/images/teaser.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23007a78'/%3E%3Cstop offset='.56' stop-color='%232e5aac'/%3E%3Cstop offset='1' stop-color='%23d49b00'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      document.documentElement.classList.add("js");
+      var stored = null;
+      try { stored = localStorage.getItem("cortex-theme"); } catch (_) {}
+      document.documentElement.dataset.theme = stored === "dark" ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+<body>
+  <div class="progress-bar" aria-hidden="true"></div>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top" aria-label="Cortex home">
+        <span class="brand-mark">C</span>
+        <span>Cortex</span>
+      </a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#data">Data</a>
+        <a href="#results">Results</a>
+        <a href="#real-world">Real World</a>
+        <a href="#citation">Citation</a>
+      </div>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+        <i data-lucide="sun" class="theme-sun" aria-hidden="true"></i>
+        <i data-lucide="moon" class="theme-moon" aria-hidden="true"></i>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="venue reveal">CoRL 2026 Submission</p>
+      <h1 class="reveal" style="--d:60ms">
+        <span class="grad-text title-line">Cortex</span>
+        <span class="title-line desktop-only">A Bidirectionally Aligned</span>
+        <span class="title-line desktop-only">Embodied Agent Framework</span>
+        <span class="title-line desktop-only">for Long-horizon Manipulation</span>
+        <span class="title-line mobile-only">A Bidirectionally</span>
+        <span class="title-line mobile-only">Aligned Embodied</span>
+        <span class="title-line mobile-only">Agent Framework</span>
+        <span class="title-line mobile-only">for Long-horizon</span>
+        <span class="title-line mobile-only">Manipulation</span>
+      </h1>
+      <p class="hero-sub reveal" style="--d:120ms">
+        Cortex aligns a high-level VLM cognitive orchestrator with a low-level VLA executor through
+        executable subtasks, compact memory, and continuous progress verification.
+      </p>
+
+      <p class="authors reveal" style="--d:170ms">
+        <span>Jiaqi Peng<sup>*1,2</sup></span>
+        <span>Xiqian Yu<sup>*2</sup></span>
+        <span>Delin Feng<sup>*2</sup></span>
+        <span>Yuqiang Yang<sup>2</sup></span>
+        <span>Wenzhe Cai<sup>2</sup></span>
+        <span>Jing Xiong<sup>2,3</sup></span>
+        <span>Ganlin Yang<sup>2,4</sup></span>
+        <span>Jinliang Zheng<sup>1,2</sup></span>
+        <span>Jiafei Cao<sup>2</sup></span>
+        <span>Xueyuan Wei<sup>2</sup></span>
+        <span>Jiangmiao Pang<sup>2</sup></span>
+        <span>Yuan Shen<sup>&dagger;1</sup></span>
+        <span>Tai Wang<sup>&dagger;2</sup></span>
+      </p>
+      <p class="affiliations reveal" style="--d:210ms">
+        <sup>1</sup>Tsinghua University &nbsp;&middot;&nbsp;
+        <sup>2</sup>Shanghai AI Laboratory &nbsp;&middot;&nbsp;
+        <sup>3</sup>Peking University &nbsp;&middot;&nbsp;
+        <sup>4</sup>USTC
+      </p>
+      <p class="author-note reveal" style="--d:230ms"><sup>*</sup>Equal contribution &nbsp;&nbsp; <sup>&dagger;</sup>Corresponding author</p>
+
+      <div class="button-row reveal" style="--d:270ms">
+        <a class="btn btn-primary" href="static/papers/cortex-paper.pdf" target="_blank" rel="noopener">
+          <i data-lucide="file-text" aria-hidden="true"></i>
+          Paper
+        </a>
+        <a class="btn" href="static/slides/cortex-technical-talk.pptx">
+          <i data-lucide="presentation" aria-hidden="true"></i>
+          Slides
+        </a>
+        <a class="btn btn-muted" href="https://steinate.github.io/cortex.github.io" target="_blank" rel="noopener">
+          <i data-lucide="globe-2" aria-hidden="true"></i>
+          Project
+        </a>
+        <span class="btn btn-disabled" aria-disabled="true">
+          <i data-lucide="github" aria-hidden="true"></i>
+          Code Coming Soon
+        </span>
+        <a class="btn" href="#citation">
+          <i data-lucide="quote" aria-hidden="true"></i>
+          BibTeX
+        </a>
+      </div>
+
+      <figure class="hero-teaser reveal" style="--d:330ms">
+        <img src="static/images/teaser.png" alt="Cortex framework teaser comparing monolithic VLA, previous dual systems, and Cortex on the beaker washing task." data-zoom loading="eager" />
+        <figcaption>
+          Cortex closes the loop between long-horizon planning and short-horizon execution by continuously
+          streaming verified subtasks and memory to the VLA executor.
+        </figcaption>
+      </figure>
+
+      <div class="stats reveal" style="--d:390ms" aria-label="Key results">
+        <article class="stat">
+          <strong>4k+ h</strong>
+          <span>annotated long-horizon videos</span>
+        </article>
+        <article class="stat">
+          <strong>30 h</strong>
+          <span>simulation data with structural priors</span>
+        </article>
+        <article class="stat">
+          <strong>32</strong>
+          <span>canonical skill primitives</span>
+        </article>
+        <article class="stat">
+          <strong>95.5%</strong>
+          <span>LIBERO-Long zero-shot success</span>
+        </article>
+        <article class="stat">
+          <strong>86.8%</strong>
+          <span>RoboTwin 2.0 overall success</span>
+        </article>
+        <article class="stat">
+          <strong>65%</strong>
+          <span>real-world chemical task success</span>
+        </article>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="overview">
+      <div class="wrap wrap-narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow">Overview</p>
+          <h2>Long-horizon manipulation needs explicit progress, not only reactive action.</h2>
+        </div>
+        <p class="lead reveal" style="--d:80ms">
+          Recent Vision-Language-Action models are strong short-horizon controllers, but they are often
+          Markovian: the current observation alone does not reliably encode which subtasks have already
+          been completed. In multi-stage manipulation, this leads to repeated actions, premature transitions,
+          and compounding errors.
+        </p>
+        <p class="lead reveal" style="--d:140ms">
+          Cortex introduces a bidirectionally aligned dual-system framework. A high-level VLM maintains
+          compact semantic memory and predicts the current executable subtask, while a low-level VLA
+          executes that localized command. The interface is standardized around canonical skills, spatial
+          and numerical grounding, event-balanced training, and a deployment harness that verifies progress
+          online.
+        </p>
+      </div>
+    </section>
+
+    <section class="section band" id="method">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Method</p>
+          <h2>A dual-system interface that both planners and executors can trust.</h2>
+          <p class="section-copy">
+            Cortex treats the subtask-memory pair as the contract between System-2 planning and System-1
+            execution. The planner is constrained to executable skills, and the executor receives local,
+            physically grounded commands instead of a brittle global task description.
+          </p>
+        </div>
+
+        <figure class="figure-card reveal" style="--d:80ms">
+          <img src="static/images/Architecture.png" alt="Cortex architecture with instruction, observation, memory, VLM orchestration, and VLA execution." data-zoom loading="lazy" />
+          <figcaption>
+            <b>Bidirectionally aligned subtask interface.</b> The VLM updates memory and streams subtasks;
+            the VLA consumes the active subtask as a grounded local objective.
+          </figcaption>
+        </figure>
+
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <span class="feature-index">1</span>
+            <h3>Executable Skill Space</h3>
+            <p>Free-form instructions are standardized into 32 canonical primitives, reducing kinematic hallucinations and making planner outputs routable by the VLA harness.</p>
+          </article>
+          <article class="feature-card reveal" style="--d:80ms">
+            <span class="feature-index">2</span>
+            <h3>Tractable Metadata</h3>
+            <p>Subtasks include object attributes, spatial relations, counts, and reachability priors so the high-level plan matches what the robot can physically execute.</p>
+          </article>
+          <article class="feature-card reveal" style="--d:160ms">
+            <span class="feature-index">3</span>
+            <h3>Event-balanced Training</h3>
+            <p>Training balances ongoing execution frames and boundary transition frames, teaching the planner when to hold a command and when to update memory.</p>
+          </article>
+          <article class="feature-card reveal" style="--d:240ms">
+            <span class="feature-index">4</span>
+            <h3>Asynchronous Loop</h3>
+            <p>System-2 runs at a slower reasoning rate while System-1 executes continuously, with harness logic for command mapping, holding, and timeout recovery.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="data">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Data</p>
+          <h2>Scalable metadata construction for long-horizon manipulation.</h2>
+          <p class="section-copy">
+            Cortex builds a standardized interface from public real-world data, public simulation data,
+            self-collected robot demonstrations, and procedural generation. The pipeline annotates subtask
+            sequences, aligns boundaries, and injects execution priors.
+          </p>
+        </div>
+
+        <figure class="figure-card reveal">
+          <img src="static/images/dataset.png" alt="Cortex dataset construction with public real-world data, simulation data, self-collected data, procedural data, annotation pipeline, and interface properties." data-zoom loading="lazy" />
+          <figcaption>
+            <b>Metadata and interface standardization.</b> The dataset pipeline aligns raw trajectories to
+            executable subtasks and adds grounding signals for both executability and tractability.
+          </figcaption>
+        </figure>
+
+        <div class="split-grid">
+          <figure class="figure-card reveal">
+            <img src="static/images/appendix_subtask_anno_pipeline_ds.png" alt="Automatic annotation pipeline for subtask segmentation and temporal alignment." data-zoom loading="lazy" />
+            <figcaption>Automatic subtask annotation and temporal alignment over long-horizon demonstrations.</figcaption>
+          </figure>
+          <figure class="figure-card reveal" style="--d:90ms">
+            <img src="static/images/chart_event_ablation.png" alt="Event-balanced sampling improves average total score while using fewer training samples." data-zoom loading="lazy" />
+            <figcaption>Event-balanced sampling improves planning score while reducing sample count near redundant intra-task frames.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band" id="results">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Results</p>
+          <h2>State-of-the-art long-horizon autonomy across planning and control.</h2>
+          <p class="section-copy">
+            Cortex improves both open-loop System-2 planning quality and closed-loop task execution,
+            with the strongest gains on tasks that require memory, subtask transitions, and physical grounding.
+          </p>
+        </div>
+
+        <div class="split-grid">
+          <figure class="figure-card reveal">
+            <img src="static/images/chart_vlm_eval.png" alt="VLM evaluation comparing Qwen3-VL 8B, GPT-5, Gemini 3.1 Pro, and Cortex full." data-zoom loading="lazy" />
+            <figcaption>
+              <b>System-2 planning.</b> Cortex achieves the highest average score at both step level and episode level.
+            </figcaption>
+          </figure>
+          <figure class="figure-card reveal" style="--d:90ms">
+            <img src="static/images/chart_sim_summary.png" alt="Simulation result summary for LIBERO-Long zero-shot and RoboTwin 2.0 overall." data-zoom loading="lazy" />
+            <figcaption>
+              <b>Simulation benchmarks.</b> Cortex reaches 95.5% on LIBERO-Long and 86.8% overall on RoboTwin 2.0.
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="table-grid">
+          <div class="table-card reveal">
+            <h3>LIBERO-Long Zero-shot</h3>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Paradigm</th><th>Method</th><th>Success</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>End-to-End</td><td>&pi;<sub>0</sub></td><td>85.2</td></tr>
+                  <tr><td>End-to-End</td><td>&pi;<sub>0.5</sub></td><td>92.4</td></tr>
+                  <tr><td>End-to-End</td><td>MemoryVLA</td><td>93.4</td></tr>
+                  <tr><td>End-to-End</td><td>OpenVLA-OFT</td><td>94.5</td></tr>
+                  <tr><td>Agentic</td><td>Gemini-3.1-Pro</td><td>91.0</td></tr>
+                  <tr class="ours"><td>Agentic</td><td>Cortex</td><td>95.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="table-card reveal" style="--d:90ms">
+            <h3>RoboTwin 2.0</h3>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Method</th><th>Short</th><th>Long</th><th>Overall</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>ACT</td><td>33.20</td><td>24.50</td><td>29.70</td></tr>
+                  <tr><td>DP3</td><td>62.67</td><td>53.45</td><td>55.24</td></tr>
+                  <tr><td>&pi;<sub>0</sub></td><td>61.50</td><td>72.55</td><td>65.92</td></tr>
+                  <tr><td>X-VLA</td><td>77.13</td><td>66.30</td><td>72.80</td></tr>
+                  <tr><td>&pi;<sub>0.5</sub></td><td>82.60</td><td>82.95</td><td>82.74</td></tr>
+                  <tr class="ours"><td>Cortex</td><td>86.00</td><td>88.00</td><td>86.80</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <figure class="figure-card reveal">
+          <img src="static/images/exp_rmbench.png" alt="RMBench result chart for memory-dependent manipulation tasks." data-zoom loading="lazy" />
+          <figcaption>
+            <b>RMBench.</b> Cortex improves memory-dependent manipulation, especially when object order,
+            counts, and prior states must be preserved across subtasks.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="real-world">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Real World</p>
+          <h2>Zero-shot deployment on complex physical workflows.</h2>
+          <p class="section-copy">
+            Cortex transfers to an ARX ACONE dual-arm setup and enables long-horizon chemistry and washing
+            workflows by combining a generalist VLM planner with a short-horizon subtask-conditioned VLA executor.
+          </p>
+        </div>
+
+        <figure class="figure-card reveal">
+          <img src="static/images/real_ds.png" alt="Chemical liquid stirring real-world rollout with fourteen subtasks." data-zoom loading="lazy" />
+          <figcaption>
+            <b>Chemical liquid stirring.</b> Cortex preserves procedure order over fourteen stages and switches
+            only after visual evidence supports completion.
+          </figcaption>
+        </figure>
+
+        <div class="split-grid">
+          <figure class="figure-card reveal">
+            <img src="static/images/beaker_overview_ds.jpg" alt="Beaker washing real-world rollout with subtask prediction and execution process." data-zoom loading="lazy" />
+            <figcaption>Beaker washing requires remembering bottle state, cap state, beaker location, and washing progress.</figcaption>
+          </figure>
+          <figure class="figure-card reveal" style="--d:90ms">
+            <img src="static/images/retry2_ds.png" alt="Local execution failure where Cortex keeps retrying the stopper grasp until success." data-zoom loading="lazy" />
+            <figcaption>When a stopper grasp fails, Cortex holds the current subtask and memory until the grasp is verified.</figcaption>
+          </figure>
+        </div>
+
+        <div class="table-card reveal">
+          <h3>20-trial Real-world Average</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Method</th><th>Chemical Task</th><th>Washing Task</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>&pi;<sub>0.5</sub></td><td>0% SR, 2.5 / 14</td><td>0% SR, 3.7 / 14</td></tr>
+                <tr><td>&pi;<sub>mem</sub></td><td>0% SR, 4.1 / 14</td><td>0% SR, 6.5 / 14</td></tr>
+                <tr class="ours"><td>Cortex</td><td>65% SR, 11.0 / 14</td><td>55% SR, 10.5 / 14</td></tr>
+                <tr><td>Human + &pi;<sub>mem</sub><sup>sub</sup></td><td>75% SR, 12.2 / 14</td><td>70% SR, 11.6 / 14</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band" id="citation">
+      <div class="wrap wrap-narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow">Citation</p>
+          <h2>BibTeX</h2>
+        </div>
+        <div class="bibtex-card reveal">
+          <button class="copy-btn" type="button" aria-label="Copy BibTeX">
+            <i data-lucide="copy" aria-hidden="true"></i>
+            Copy
+          </button>
+<pre id="bibtex-text">@misc{peng2026cortex,
+  title={Cortex: A Bidirectionally Aligned Embodied Agent Framework for Long-horizon Manipulation},
+  author={Jiaqi Peng and Xiqian Yu and Delin Feng and Yuqiang Yang and Wenzhe Cai and Jing Xiong and Ganlin Yang and Jinliang Zheng and Jiafei Cao and Xueyuan Wei and Jiangmiao Pang and Yuan Shen and Tai Wang},
+  year={2026},
+  url={https://steinate.github.io/cortex.github.io}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <a class="nav-brand" href="#top">
+          <span class="brand-mark">C</span>
+          <span>Cortex</span>
+        </a>
+        <p>Bidirectionally aligned embodied agents for long-horizon manipulation.</p>
+      </div>
+      <p class="footer-links">
+        <a href="static/papers/cortex-paper.pdf">Paper PDF</a>
+        <span>&middot;</span>
+        <a href="static/slides/cortex-technical-talk.pptx">Slides</a>
+        <span>&middot;</span>
+        <a href="#citation">BibTeX</a>
+      </p>
+    </div>
+  </footer>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" type="button" aria-label="Close image">
+      <i data-lucide="x" aria-hidden="true"></i>
+    </button>
+    <img src="" alt="" />
+    <p class="lightbox-caption"></p>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="static/js/main.js"></script>
+</body>
+</html>

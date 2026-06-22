@@ -29,6 +29,12 @@
     });
   }
 
+  document.querySelectorAll(".author-link[href='#']").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+    });
+  });
+
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var revealItems = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
   if (reduceMotion || !("IntersectionObserver" in window)) {

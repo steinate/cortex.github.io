@@ -572,7 +572,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(292px, .8fr);
   gap: 18px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .video-frame,
@@ -591,7 +591,7 @@ h3 {
 
 .video-frame video {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   object-fit: contain;
   border-radius: 6px;
   background: #000;
@@ -601,7 +601,7 @@ h3 {
 .video-panel {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: clamp(22px, 2.5vw, 30px);
   background:
     linear-gradient(180deg, rgba(233, 245, 242, .64), rgba(255, 255, 255, .88)),
@@ -646,6 +646,7 @@ html[data-theme="dark"] .video-panel {
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
   gap: 12px;
+  align-items: center;
   padding: 15px 0;
   border-top: 1px solid var(--line);
 }
@@ -665,6 +666,7 @@ html[data-theme="dark"] .video-panel {
   height: 38px;
   align-items: center;
   justify-content: center;
+  align-self: center;
   border: 1px solid rgba(10, 154, 144, .28);
   border-radius: 8px;
   color: var(--teal);
@@ -1360,14 +1362,17 @@ html.js .reveal.is-visible {
   .video-point,
   .video-point:first-child,
   .video-point:last-child {
-    display: block;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
     padding: 0 0 0 15px;
     border-top: 0;
     border-left: 1px solid var(--line);
   }
 
   .video-icon {
-    margin-bottom: 10px;
+    margin-bottom: 0;
   }
 
   .feature-grid {

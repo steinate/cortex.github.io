@@ -29,6 +29,44 @@
     });
   }
 
+  document.querySelectorAll(".annotation-carousel").forEach(function (carousel) {
+    var slides = Array.prototype.slice.call(carousel.querySelectorAll(".annotation-slide"));
+    var prev = carousel.querySelector("[data-carousel-prev]");
+    var next = carousel.querySelector("[data-carousel-next]");
+    var count = carousel.querySelector(".carousel-count");
+    var index = Math.max(0, slides.findIndex(function (slide) { return slide.classList.contains("is-active"); }));
+
+    function showSlide(nextIndex) {
+      if (!slides.length) return;
+      index = (nextIndex + slides.length) % slides.length;
+      slides.forEach(function (slide, slideIndex) {
+        var active = slideIndex === index;
+        slide.classList.toggle("is-active", active);
+        slide.querySelectorAll("video").forEach(function (video) {
+          if (!active) video.pause();
+          if (active && video.readyState === 0) video.load();
+        });
+      });
+      if (count) count.textContent = (index + 1) + " / " + slides.length;
+    }
+
+    if (prev) prev.addEventListener("click", function () { showSlide(index - 1); });
+    if (next) next.addEventListener("click", function () { showSlide(index + 1); });
+
+    carousel.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showSlide(index - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showSlide(index + 1);
+      }
+    });
+
+    showSlide(index);
+  });
+
   document.querySelectorAll(".author-link[href='#']").forEach(function (link) {
     link.addEventListener("click", function (event) {
       event.preventDefault();

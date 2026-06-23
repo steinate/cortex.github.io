@@ -37,8 +37,7 @@
         <span>Cortex</span>
       </a>
       <div class="nav-links">
-        <a href="#overview">Overview</a>
-        <a href="#video">Video</a>
+        <a href="#real-rollouts">Video</a>
         <a href="#method">Method</a>
         <a href="#data">Data</a>
         <a href="#results">Results</a>
@@ -94,7 +93,7 @@
       <p class="author-note reveal" style="--d:230ms"><sup>*</sup>Equal contribution &nbsp;&nbsp; <sup>&dagger;</sup>Corresponding author</p>
 
       <div class="button-row reveal" style="--d:270ms">
-        <a class="btn btn-primary" href="#video">
+        <a class="btn btn-primary" href="#real-rollouts">
           <i data-lucide="play-circle" aria-hidden="true"></i>
           Video
         </a>
@@ -123,6 +122,23 @@
           streaming verified subtasks and memory to the VLA executor.
         </figcaption>
       </figure>
+
+      <section class="real-video-strip reveal" id="real-rollouts" style="--d:360ms" aria-label="Real-world long-horizon demonstrations">
+        <div class="real-video-grid">
+          <figure class="real-video-card">
+            <video autoplay muted loop controls preload="metadata" playsinline width="2560" height="1440" poster="static/images/poster_beaker.jpg" src="static/videos/beaker.mp4"></video>
+            <figcaption>
+              <b>Beaker washing.</b> Cortex tracks bottle state, cap state, beaker placement, and water-transfer progress across a long manipulation chain.
+            </figcaption>
+          </figure>
+          <figure class="real-video-card">
+            <video autoplay muted loop controls preload="metadata" playsinline width="2560" height="1440" poster="static/images/poster_mof.jpg" src="static/videos/mof.mp4"></video>
+            <figcaption>
+              <b>MOF chemistry workflow.</b> The agent preserves task order and advances only after visual evidence supports each subtask transition.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
 
       <div class="stats reveal" style="--d:390ms" aria-label="Key results">
         <article class="stat">
@@ -154,28 +170,6 @@
   </header>
 
   <main>
-    <section class="section" id="overview">
-      <div class="wrap wrap-narrow">
-        <div class="section-head reveal">
-          <p class="eyebrow">Overview</p>
-          <h2>Long-horizon manipulation needs explicit progress, not only reactive action.</h2>
-        </div>
-        <p class="lead reveal" style="--d:80ms">
-          Recent Vision-Language-Action models are strong short-horizon controllers, but they are often
-          Markovian: the current observation alone does not reliably encode which subtasks have already
-          been completed. In multi-stage manipulation, this leads to repeated actions, premature transitions,
-          and compounding errors.
-        </p>
-        <p class="lead reveal" style="--d:140ms">
-          Cortex introduces a bidirectionally aligned dual-system framework. A high-level VLM maintains
-          compact semantic memory and predicts the current executable subtask, while a low-level VLA
-          executes that localized command. The interface is standardized around canonical skills, spatial
-          and numerical grounding, event-balanced training, and a deployment harness that verifies progress
-          online.
-        </p>
-      </div>
-    </section>
-
     <section class="section" id="video">
       <div class="wrap">
         <div class="section-head video-head reveal">
@@ -189,7 +183,7 @@
 
         <div class="video-showcase reveal" style="--d:80ms">
           <figure class="video-frame">
-            <video controls preload="none" playsinline width="1440" height="533" poster="static/images/cortex-video-poster.jpg" src="static/videos/cortex-demo.mp4"></video>
+            <video autoplay muted loop controls preload="metadata" playsinline width="1440" height="533" poster="static/images/cortex-video-poster.jpg" src="static/videos/cortex-demo.mp4"></video>
             <figcaption>
               <b>Closed-loop long-horizon manipulation.</b> Cortex keeps task progress explicit, routes
               executable subtasks, and verifies transitions before moving forward.
@@ -319,19 +313,19 @@
 
           <div class="annotation-stage">
             <figure class="annotation-slide is-active" data-slide-title="Agibot long-horizon rollout">
-              <video controls preload="none" playsinline width="640" height="480" poster="static/images/poster_vis_agibot.jpg" src="static/videos/vis_agibot_task_327_episode_1.mp4"></video>
+              <video autoplay muted loop controls preload="metadata" playsinline width="640" height="480" poster="static/images/poster_vis_agibot.jpg" src="static/videos/vis_agibot_task_327_episode_1.mp4"></video>
               <figcaption>
                 <b>Agibot trajectory.</b> Subtask labels and colored progress bars reveal action boundaries in a 4:3 rollout.
               </figcaption>
             </figure>
             <figure class="annotation-slide" data-slide-title="Behavior square-view rollout">
-              <video controls preload="none" playsinline width="720" height="720" poster="static/images/poster_vis_behavior.jpg" src="static/videos/vis_behavior_task-0010_episode-100010.mp4"></video>
+              <video autoplay muted loop controls preload="metadata" playsinline width="720" height="720" poster="static/images/poster_vis_behavior.jpg" src="static/videos/vis_behavior_task-0010_episode-100010.mp4"></video>
               <figcaption>
                 <b>Behavior trajectory.</b> A square-view rollout demonstrates consistent subtask annotation under different video geometry.
               </figcaption>
             </figure>
             <figure class="annotation-slide" data-slide-title="Galaxea air-conditioner rollout">
-              <video controls preload="none" playsinline width="960" height="540" poster="static/images/poster_vis_galaxea.jpg" src="static/videos/vis_galaxea_adjust_air_conditioner_episode_1.mp4"></video>
+              <video autoplay muted loop controls preload="metadata" playsinline width="960" height="540" poster="static/images/poster_vis_galaxea.jpg" src="static/videos/vis_galaxea_adjust_air_conditioner_episode_1.mp4"></video>
               <figcaption>
                 <b>Galaxea trajectory.</b> Wide-format visualization shows subtask switching for a household interaction sequence.
               </figcaption>
